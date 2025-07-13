@@ -12,15 +12,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import Hello from "@/components/Hello";
+import { defineComponent } from 'vue'
+import Hello from "@/components/Hello"
 
 export default defineComponent({
   name: 'App',
-  components:{
-    Hello
+  components: {
+      Hello
   }
-});
+})
 </script>
 
 <style>
