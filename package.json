@@ -11,6 +11,7 @@
     "@vitejs/plugin-vue-jsx": "^5.0.1",
     "@vue/babel-plugin-jsx": "^1.4.0",
     "@vue/runtime-dom": "^3.5.17",
+    "ant-design-vue": "4.0.0-rc.6",
     "core-js": "^3.6.5",
     "vue": "^3.0.0"
   },
