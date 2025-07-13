@@ -1,9 +1,9 @@
 <template>
-    <home />
+    <home v-if="true" />
+    <editor v-else />
 </template>
 
 <script lang="ts" setup>
-import { defineComponent } from 'vue';
 import Home from './views/Home.vue'
 import Editor from './views/Editor.vue'
 </script>

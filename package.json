@@ -13,7 +13,8 @@
     "@vue/runtime-dom": "^3.5.17",
     "ant-design-vue": "4.0.0-rc.6",
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
