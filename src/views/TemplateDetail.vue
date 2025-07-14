@@ -18,7 +18,7 @@
           <canvas id="barcode-container"></canvas>
         </div>
         <div class="use-button">
-          <router-link to="/editor">
+          <router-link :to="`/editor/${template.id}`">
             <a-button type="primary" size="large"> 使用模版 </a-button>
           </router-link>
           <a-button size="large"> 下载图片海报 </a-button>
@@ -31,10 +31,15 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import { GlobalDataProps } from '../store/index'
-import { TemplateProps } from '../store/templates'
+import templates, { TemplateProps } from '../store/templates'
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 export default defineComponent({
+  computed: {
+    templates() {
+      return templates
+    }
+  },
   setup() {
     const route = useRoute();
     const store = useStore<GlobalDataProps>();

@@ -1,20 +1,20 @@
 <template>
-    <home v-if="true" />
-    <editor v-else />
+  <div class="app-container">
+    <router-view/>
+  </div>
 </template>
 
-<script lang="ts" setup>
-import Home from './views/Home.vue'
-import Editor from './views/Editor.vue'
+<script lang="ts">
+import { defineComponent } from 'vue';
+export default defineComponent({
+  name: 'App',
+});
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.app-container .global-spinner {
+  position: fixed;
+  top: 10px;
+  right: 50%;
 }
 </style>
