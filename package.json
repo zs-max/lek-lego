@@ -13,10 +13,13 @@
     "@vue/runtime-dom": "^3.5.17",
     "ant-design-vue": "4.0.0-rc.6",
     "core-js": "^3.6.5",
+    "uuid": "^9.0.0",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.13"
+    "vue-router": "^4.0.13",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
