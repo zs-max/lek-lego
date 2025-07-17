@@ -12,6 +12,7 @@ export interface PropToForm {
         value:any;
     }[];
     initalTransfrom?:(v:any) => any;
+    valueProp?:string;
 }
 
 export type PropsToForm = {
