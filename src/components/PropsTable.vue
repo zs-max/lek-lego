@@ -2,7 +2,10 @@
 <template>
   <div class="props-table">
     <div v-for="(value,key) in finalProps" :key="key" class="prop-item">
-      <component v-if="value" :is="value.component" :value="value.value"></component>
+      <span class="label" v-if="value.text">{{value.text}}</span>
+      <div class="props-component">
+        <component v-if="value" :is="value.component" :value="value.value" v-bind="value.extraProps"></component>
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +33,7 @@ export default defineComponent({
             result[newKey] = item
           }
           return result
-        },{} as PropsToForm)
+        },{} as Required<PropsToForm>)
       })
     return {
       finalProps
@@ -41,5 +44,16 @@ export default defineComponent({
 
 
 <style scoped>
+.prop-item{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.label{
+  width: 28%;
+}
+.props-component{
+  width: 70%;
+}
 
 </style>
