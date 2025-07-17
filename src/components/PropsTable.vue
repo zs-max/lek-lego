@@ -4,7 +4,7 @@
     <div v-for="(value,key) in finalProps" :key="key" class="prop-item">
       <span class="label" v-if="value.text">{{value.text}}</span>
       <div class="props-component">
-        <component v-if="value" :is="value.component" :[value.valueProp]="value.value" v-bind="value.extraProps">
+        <component v-if="value" :is="value.component" :[value.valueProp]="value.value" v-bind="value.extraProps" v-on="value.events">
           <template v-if="value.options">
             <component :is="value.subComponent" v-for="(option,k) in value.options" :key="k" :value="option.value" >{{option.text}}</component>
           </template>
@@ -20,6 +20,21 @@ import {TextComponentProps} from "@/defaultProps";
 import {reduce} from "lodash-es";
 import {mapPropsToForms, PropsToForm} from "@/propsMap";
 
+interface FormProps {
+  component:string;
+  value:string;
+  subComponent?:string;
+  extraProps?:{[key:string]:any};
+  text?:string;
+  options?:{
+    text:string;
+    value:any;
+  }[];
+  initalTransfrom?:(v:any) => any;
+  valueProp?:string;
+  eventName?:string;
+  events:{[key:string]:(v:any) => void};
+}
 export default defineComponent({
   name:"props-table",
   props:{
@@ -27,18 +42,26 @@ export default defineComponent({
       type:Object as PropType<TextComponentProps>
     }
   },
-  setup(props){
+  setup(props,context){
       const finalProps = computed(()=>{
         return reduce(props.props,(result,value,key)=>{
           const newKey = key as keyof TextComponentProps
           const item = mapPropsToForms[newKey]
           if(item){
-            item.value = item.initalTransfrom ? item.initalTransfrom(value) :value
-            item.valueProp = item.valueProp ? item.valueProp : 'value'
-            result[newKey] = item
+            const {valueProp = 'value',eventName = 'change',initalTransfrom } = item;
+            const newItem = {
+              ...item,
+              value: initalTransfrom ? initalTransfrom(value) :value,
+              valueProp,
+              eventName,
+              events:{
+                [eventName]: (e:any) => {context.emit('change',{key,value:e})}
+              }
+            }
+            result[newKey] = newItem
           }
           return result
-        },{} as Required<PropsToForm>)
+        },{} as {[key:string]:FormProps})
       })
     return {
       finalProps

@@ -62,7 +62,7 @@
           class="settings-panel"
       >
         组件属性
-        <props-table v-if="currentElement && currentElement.props" :props="currentElement.props"></props-table>
+        <props-table v-if="currentElement && currentElement.props" :props="currentElement.props" @change="handleChange"></props-table>
         <pre>
         {{ currentElement && currentElement.props }}
         </pre>
@@ -101,12 +101,17 @@ export default defineComponent({
     const setActive = (id: string) => {
       store.commit("setActive", id);
     };
+
+    const handleChange = (e:any) =>{
+      console.log(e)
+    }
     return {
       components,
       defaultTextTemplates,
       addItem,
       setActive,
       currentElement,
+      handleChange
     };
   },
 });
