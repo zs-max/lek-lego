@@ -80,7 +80,7 @@ import ComponentsList from "@/components/ComponentsList.vue";
 import defaultTextTemplates from "@/defalutTemplates";
 import EditWrapper from "@/components/EditWrapper.vue";
 import { ComponentData } from "@/store/editor";
-import PropsTable from "@/components/PropsTable.vue";
+import PropsTable from "@/components/PropsTable";
 
 export default defineComponent({
   components: {

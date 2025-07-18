@@ -1,0 +1,96 @@
+import {computed, defineComponent, PropType, VNode} from "vue";
+import {TextComponentProps} from "@/defaultProps";
+import {reduce} from "lodash-es";
+import {mapPropsToForms, PropsToForm} from "@/propsMap";
+import {Input,InputNumber,Slider,Radio,Select} from "ant-design-vue";
+
+// 创建组件实例和string之间的对应关系
+const mapToComponent = {
+    'a-textarea':Input.TextArea,
+    'a-input-number':InputNumber,
+    'a-slider':Slider,
+    'a-radio-group':Radio.Group,
+    'a-radio-button':Radio.Button,
+    'a-select':Select,
+    'a-select-option':Select.Option
+} as any
+
+interface FormProps {
+    component:string;
+    value:string;
+    subComponent?:string;
+    extraProps?:{[key:string]:any};
+    text?:string;
+    options?:{
+        text:string|VNode;
+        value:any;
+    }[];
+    initalTransfrom?:(v:any) => any;
+    valueProp?:string;
+    eventName?:string;
+    events:{[key:string]:(v:any) => void};
+}
+
+function capitalizeFirstLetter(string:string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+export default defineComponent({
+    name:"props-table",
+    props:{
+        props:{
+            type:Object as PropType<TextComponentProps>
+        }
+    },
+    emits:['change'],
+    setup(props,context){
+        const finalProps = computed(()=>{
+            return reduce(props.props,(result,value,key)=>{
+                const newKey = key as keyof TextComponentProps
+                const item = mapPropsToForms[newKey]
+                if(item){
+                    const {valueProp = 'value',eventName = 'change',initalTransfrom,afterTransfrom} = item;
+                    const newItem = {
+                        ...item,
+                        value: initalTransfrom ? initalTransfrom(value) :value,
+                        valueProp,
+                        eventName,
+                        events:{
+                            ['on'+ capitalizeFirstLetter(eventName)]: (e:any) => {context.emit('change',{key,value: afterTransfrom ? afterTransfrom(e) : e})}
+                        }
+                    }
+                    result[newKey] = newItem
+                }
+                return result
+            },{} as {[key:string]:FormProps})
+        })
+        return ()=>(
+            <div class="props-table">
+                {
+                    Object.keys(finalProps.value).map(key=>{
+                        const value = finalProps.value[key]
+                        const ComponentName = mapToComponent[value.component]
+                        const SubComponent = value.subComponent ?  mapToComponent[value.subComponent] : null
+                        const props = {
+                            [value.valueProp as string]: value.value,
+                            ...value.extraProps,
+                            ...value.events
+                        }
+                        return (
+                            <div key={key} class="prop-item">
+                                {value.text && <span class="label">{value.text}</span>}
+                                <div class="prop-component">
+                                    <ComponentName {...props}>
+                                        {value.options && value.options.map(option=>{
+                                            return (<SubComponent value={option.value}>{option.text} </SubComponent>)
+                                        })}
+                                    </ComponentName>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        )
+    }
+})
