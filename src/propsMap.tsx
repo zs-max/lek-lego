@@ -25,7 +25,7 @@ const fontFamilyArr = [
 const fontFamilyOptions = fontFamilyArr.map(font=>{
     return {
         value:font.value,
-        text:h('span',{style:{fontFamily:font.value}},font.text)
+        text:<span style={{fontFamily:font.value}}>{font.text}</span> as VNode
     }
 })
 

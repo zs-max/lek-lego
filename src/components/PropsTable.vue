@@ -15,7 +15,7 @@
 </template>
 
 <script  lang="ts">
-import {computed, defineComponent, PropType} from "vue";
+import {computed, defineComponent, PropType, VNode} from "vue";
 import {TextComponentProps} from "@/defaultProps";
 import {reduce} from "lodash-es";
 import {mapPropsToForms, PropsToForm} from "@/propsMap";
@@ -27,7 +27,7 @@ interface FormProps {
   extraProps?:{[key:string]:any};
   text?:string;
   options?:{
-    text:string;
+    text:string|VNode;
     value:any;
   }[];
   initalTransfrom?:(v:any) => any;
