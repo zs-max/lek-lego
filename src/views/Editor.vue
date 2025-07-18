@@ -72,38 +72,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-import { useStore } from "vuex";
-import { GlobalDataProps } from "@/store";
-import LText from "@/components/Ltext.vue";
-import ComponentsList from "@/components/ComponentsList.vue";
-import defaultTextTemplates from "@/defalutTemplates";
-import EditWrapper from "@/components/EditWrapper.vue";
-import { ComponentData } from "@/store/editor";
-import PropsTable from "@/components/PropsTable";
+import { defineComponent, computed } from 'vue'
+import { useStore } from 'vuex'
+import { GlobalDataProps } from '@/store'
+import LText from '@/components/Ltext.vue'
+import ComponentsList from '@/components/ComponentsList.vue'
+import defaultTextTemplates from '@/defalutTemplates'
+import EditWrapper from '@/components/EditWrapper.vue'
+import { ComponentData } from '@/store/editor'
+import PropsTable from '@/components/PropsTable.vue'
 
 export default defineComponent({
   components: {
     PropsTable,
     LText,
     ComponentsList,
-    EditWrapper,
+    EditWrapper
   },
-  setup() {
-    const store = useStore<GlobalDataProps>();
-    const components = computed(() => store.state.editor.components);
+  setup () {
+    const store = useStore<GlobalDataProps>()
+    const components = computed(() => store.state.editor.components)
     const currentElement = computed<ComponentData | null>(
-        () => store.getters.getCurrentElement
-    );
+      () => store.getters.getCurrentElement
+    )
     const addItem = (props: any) => {
-      store.commit("addComponent", props);
-    };
+      store.commit('addComponent', props)
+    }
     const setActive = (id: string) => {
-      store.commit("setActive", id);
-    };
+      store.commit('setActive', id)
+    }
 
-    const handleChange = (e:any) =>{
-      store.commit("updateComponent", e);
+    const handleChange = (e:any) => {
+      store.commit('updateComponent', e)
     }
     return {
       components,
@@ -112,9 +112,9 @@ export default defineComponent({
       setActive,
       currentElement,
       handleChange
-    };
-  },
-});
+    }
+  }
+})
 </script>
 
 <style>
