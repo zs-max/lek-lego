@@ -103,7 +103,7 @@ export default defineComponent({
     };
 
     const handleChange = (e:any) =>{
-      console.log(e)
+      store.commit("updateComponent", e);
     }
     return {
       components,
