@@ -1,5 +1,5 @@
 import {TextComponentProps} from "@/defaultProps";
-
+import {VNode,h} from "vue";
 
 export interface PropToForm {
     component:string;
@@ -7,7 +7,7 @@ export interface PropToForm {
     extraProps?:{[key:string]:any};
     text?:string;
     options?:{
-        text:string;
+        text:string|VNode;
         value:any;
     }[];
     initalTransfrom?:(v:any) => any;
@@ -15,6 +15,20 @@ export interface PropToForm {
     valueProp?:string;
     eventName?:string;
 }
+
+const fontFamilyArr = [
+    {value:'SimSun',text:'宋体'},
+    {value:'SimHei',text:'黑体'},
+    {value:'FangSong',text:'仿宋'},
+]
+
+const fontFamilyOptions = fontFamilyArr.map(font=>{
+    return {
+        value:font.value,
+        text:h('span',{style:{fontFamily:font.value}},font.text)
+    }
+})
+
 
 export type PropsToForm = {
     [P in keyof TextComponentProps]?:PropToForm
@@ -59,9 +73,7 @@ export const mapPropsToForms:PropsToForm = {
         text:'字体',
         options:[
             {value:'',text:'无'},
-            {value:'SimSun',text:'宋体'},
-            {value:'SimHei',text:'黑体'},
-            {value:'FangSong',text:'仿宋'},
+            ...fontFamilyOptions
         ]
     }
 }
