@@ -1,6 +1,6 @@
 <script  lang="ts">
 import Hello from './Hello.vue'
-import {defineComponent} from "vue";
+import {defineComponent, ref} from "vue";
 
 export default defineComponent({
     name: "HelloWorld",
@@ -13,9 +13,27 @@ export default defineComponent({
             default: "hello world"
         }
     },
-    data() {
+    emits: ['send'],
+    setup(props, context) {
+        const todo = ref('')
+        const todos = ref([])
+        const count = ref(1)
+        const setCount = () => {
+           count.value++
+        }
+        const addTodo = () => {
+          if(todo.value !== '') {
+            todos.value.push(todo.value)
+            context.emit('send', todo.value)
+          }
+        }
+
         return {
-            count: 0
+            count,
+            todo,
+            todos,
+            setCount,
+            addTodo
         }
     }
 })
@@ -24,7 +42,12 @@ export default defineComponent({
 
 <template>
     <h1>{{msg}}</h1>
-    <button @click="count++">{{count}}</button>
+    <button @click="setCount">{{count}}</button>
+    <input v-model="todo" type="text">
+    <button class="addTodo" @click="addTodo">添加</button>
+    <ul>
+        <li v-for="(item, index) in todos" :key="index">{{item}}</li>
+    </ul>
     <hello msg="1234"></hello>
 </template>
 
