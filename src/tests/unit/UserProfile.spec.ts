@@ -10,7 +10,14 @@ jest.mock('ant-design-vue',()=>({
     }
 }));
 // jest.mock('vuex');
-jest.mock('vue-router');
+const mockedRoutes:string[] = []
+jest.mock('vue-router',()=>({
+    useRouter: ()=>({
+      push:(url:string)=>{
+        mockedRoutes.push(url)
+      }
+    })
+}));
 
 const mockComponent = {
     template: '<div><slot></slot></div>'
@@ -28,6 +35,7 @@ const globalComponents = {
 }
 describe("UserProfile.vue", () => {
     beforeAll(()=>{
+        jest.useFakeTimers()
         wrapper = mount(UserProfile,{
             props: {
                 user: {
@@ -63,7 +71,16 @@ describe("UserProfile.vue", () => {
         expect(wrapper.get('.user-profile-component').html()).toContain('viking')
         expect(wrapper.find('.user-profile-dropdown').exists()).toBeTruthy()
     })
-    afterAll(()=>{
-        // wrapper.unmount();
+
+    it('should call logout abd show message,call router.push after timeout',async ()=>{
+        await wrapper.get('.user-profile-dropdown .logout').trigger('click')
+        expect(store.state.user.isLogin).toBeFalsy()
+        expect(message.success).toHaveBeenCalledTimes(1)
+        jest.runAllTimers()
+        expect(mockedRoutes).toEqual(['/'])
+    })
+
+    afterEach( ()=>{
+        (message as jest.Mocked<typeof message>).success.mockReset()
     })
 })
