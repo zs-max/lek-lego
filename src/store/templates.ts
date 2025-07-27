@@ -8,7 +8,7 @@ export interface TemplateProps {
   copiedCount: number;
 }
 
-const testData: TemplateProps[] = [
+export const testData: TemplateProps[] = [
   {
     id: 1,
     title: "前端架构师直播海报1",
