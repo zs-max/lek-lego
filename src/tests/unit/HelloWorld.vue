@@ -67,7 +67,7 @@ export default defineComponent({
     <button class="addTodo" @click="addTodo">添加</button>
     <p class="loading" v-if="user.loading">Loading</p>
     <div v-else class="userName">{{user.data && user.data.username}}</div>
-    <p v-if="user.error">Error</p>
+    <p class="error" v-if="user.error">Error</p>
     <button class="loadUser" @click="loadUser">加载用户</button>
     <ul>
         <li v-for="(item, index) in todos" :key="index">{{item}}</li>

@@ -1,4 +1,4 @@
-import {shallowMount,mount } from "@vue/test-utils";
+import {shallowMount, mount, VueWrapper} from "@vue/test-utils";
 import HelloWorld from "./HelloWorld.vue";
 import Hello from "./Hello.vue";
 import axios from "axios";
@@ -7,14 +7,18 @@ import  flushPromises from "flush-promises";
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
+const msg = 'new message'
+let wrapper:VueWrapper<any>
 describe("HelloWorld.vue", () => {
-    it("render props.msg when passed", () => {
-        const msg = 'new message'
-        const wrapper = mount(HelloWorld,{
+    beforeAll(()=>{
+        wrapper = mount(HelloWorld,{
             props: {
                 msg
             }
         });
+    })
+
+    it("render props.msg when passed", () => {
         // console.log(wrapper.html());
         // console.log(wrapper.get('h1').text());
         console.log(wrapper.find('h1').text()); // 找不到的时候会报错
@@ -22,25 +26,13 @@ describe("HelloWorld.vue", () => {
 
     // 测试点击button后count是否加1
     it("should update the count when clicking the button", async () => {
-        const msg = 'new message'
-        const wrapper = shallowMount(HelloWorld,{
-            props: {
-                msg
-            }
-        });
         await wrapper.get('button').trigger('click');
         expect(wrapper.get('button').text()).toBe('2');
     })
 
     // 测试input和button后值变化了没
     it("should add todo when till the input and click the add button", async () => {
-        const msg = 'new message'
         const todoContent = 'buy milk'
-        const wrapper = shallowMount(HelloWorld,{
-            props: {
-                msg
-            }
-        });
         await wrapper.get('input').setValue(todoContent);
         expect(wrapper.get('input').element.value).toBe(todoContent);
         await wrapper.get('.addTodo').trigger('click');
@@ -53,16 +45,32 @@ describe("HelloWorld.vue", () => {
     })
 
     // 测试axios请求
-    it.only("should load user message when click the load button", async () => {
-        const msg = 'new message'
-        const wrapper = shallowMount(HelloWorld,{
-            props: {
-                msg
-            }
-        });
+    // it.only("should load user message when click the load button", async () => {
+    //     const msg = 'new message'
+    //     const wrapper = shallowMount(HelloWorld,{
+    //         props: {
+    //             msg
+    //         }
+    //     });
+    //     mockedAxios.get.mockResolvedValueOnce({
+    //         data: {
+    //           username:'viking'
+    //         }
+    //     });
+    //     await wrapper.get('.loadUser').trigger('click');
+    //     expect(mockedAxios.get).toHaveBeenCalled();
+    //     expect(wrapper.find('.loading').exists()).toBeTruthy();
+    //     // 等待promise执行完毕
+    //     await flushPromises();
+    //     // 界面更新完毕
+    //     expect(wrapper.find('.loading').exists()).toBeFalsy();
+    //     expect(wrapper.get('.userName').text()).toBe('viking');
+    // })
+
+    it("should load user message when click the load button", async () => {
         mockedAxios.get.mockResolvedValueOnce({
             data: {
-              username:'viking'
+                username:'viking'
             }
         });
         await wrapper.get('.loadUser').trigger('click');
@@ -73,5 +81,20 @@ describe("HelloWorld.vue", () => {
         // 界面更新完毕
         expect(wrapper.find('.loading').exists()).toBeFalsy();
         expect(wrapper.get('.userName').text()).toBe('viking');
+    })
+
+
+    it("should load error message when return promise reject", async () => {
+        mockedAxios.get.mockRejectedValueOnce(new Error('network error'));
+        await wrapper.get('.loadUser').trigger('click');
+        expect(mockedAxios.get).toHaveBeenCalledTimes(1)
+        await flushPromises();
+        // 界面更新完毕
+        expect(wrapper.find('.loading').exists()).toBe(false);
+        expect(wrapper.find('.error').exists()).toBe(false);
+    })
+
+    afterEach(()=>{
+      mockedAxios.get.mockReset();
     })
 });
