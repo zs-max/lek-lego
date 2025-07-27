@@ -11,7 +11,9 @@ export interface UserProps {
 const user: Module<UserProps, GlobalDataProps> = {
   state: {
     isLogin: false,
-    data: {},
+    data: {
+      userName:'viking'
+    },
     token: localStorage.getItem("token") || "",
   },
   mutations: {
