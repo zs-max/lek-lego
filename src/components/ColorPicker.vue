@@ -12,7 +12,7 @@ const defaultColors = [
   '#00ffff',
   '#ff00ff',
   '#808080',
-  'transparent'
+  ''
 ]
 
 export default defineComponent({
@@ -53,5 +53,45 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.lego-color-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  input {
+    width: 80px;
+    height: 50px;
+    border: 0px;
+    padding:0px;
+  }
+}
+.picked-color-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2px;
+  margin: 5px;
+}
 
+
+.picked-color-list li {
+  list-style: none;
+
+  flex: 1;
+  width: 20%;
+  min-width: 20%;
+  max-width: 20%;
+}
+
+.color-item {
+  padding: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  margin-right: 5px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
+
+.transparent-back {
+background: url("~@/assets/img/transparent.png");
+}
 </style>

@@ -26,6 +26,7 @@ export const testComponents: ComponentData[] = [
       text: "hello1",
       fontSize: "20px",
       fontWeight: "bold",
+      color:'#000000',
       lineHeight: "1",
       textAlign: "left",
       fontFamily: "",

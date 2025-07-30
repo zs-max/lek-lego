@@ -3,7 +3,6 @@
   <div class="props-table">
 
     <div v-for="(value,key) in finalProps" :key="key" class="prop-item">
-      {{value.options}}
       <span class="label" v-if="value.text">{{value.text}}</span>
       <div class="props-component">
         <component v-if="value" :is="value.component" :[value.valueProp]="value.value" v-bind="value.extraProps" v-on="value.events">
@@ -18,12 +17,14 @@
   </div>
 </template>
 
-<script  lang="ts">
+<script lang="ts">
 import { computed, defineComponent, PropType, VNode } from 'vue'
 import { TextComponentProps } from '@/defaultProps'
 import { reduce } from 'lodash-es'
 import { mapPropsToForms, PropsToForm } from '@/propsMap'
 import RenderVnode from '@/components/RenderVnode'
+import ColorPicker from '@/components/ColorPicker.vue'
+
 
 interface FormProps {
   component:string;
@@ -48,7 +49,8 @@ export default defineComponent({
     }
   },
   components: {
-    RenderVnode
+    RenderVnode,
+    ColorPicker
   },
   setup (props, context) {
     const finalProps = computed(() => {
