@@ -1,9 +1,9 @@
 <template>
    <div class="file-upload">
      <button @click="triggerUpload">
-       <span v-if="fileStatus === 'error'">上传失败</span>
-       <span v-else-if="fileStatus === 'loading'">上传中</span>
+       <span v-if="fileStatus === 'loading'">正在上传</span>
        <span v-else-if="fileStatus === 'success'">上传成功</span>
+       <span v-else-if="fileStatus === 'error'">上传失败</span>
        <span v-else>点击上传</span>
      </button>
      <input ref="fileInput" type="file" :style="{display:'none'}" @change="onFileChange" />
@@ -35,15 +35,14 @@ export default defineComponent({
         const formData = new FormData()
         formData.append(uploadFile.name,uploadFile)
         // 'https://local.test:7001/api/upload's
+        fileStatus.value = 'loading'
         axios.post(props.action,formData,{
           headers:{
             'Content-Type':'multipart/form-data'
           }
         }).then(resp=>{
-          debugger
           fileStatus.value = 'success'
         }).catch(e=>{
-          debugger
           fileStatus.value = 'error'
         })
       }
