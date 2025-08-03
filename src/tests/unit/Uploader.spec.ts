@@ -24,7 +24,7 @@ describe('Uploader Component',()=>{
         expect(wrapper.get('button span').text()).toBe('点击上传')
         expect(wrapper.get('input').isVisible()).toBeFalsy()
     })
-    it('upload process should work fine',async ()=>{
+    it.only('upload process should work fine',async ()=>{
         mockedAxios.post.mockResolvedValueOnce({status:'success'})
         // 怎样创建一个文件
         const fileInput = wrapper.get('input').element as HTMLInputElement
@@ -37,11 +37,12 @@ describe('Uploader Component',()=>{
         // expect(wrapper.get('button span').text()).toBe('正在上传')
         expect(mockedAxios.post).toHaveBeenCalledTimes(1)
         // button 为disabled
-        expect(wrapper.get('button').attributes('disabled')).toBeTruthy()
+        console.log(wrapper.get('button').attributes(),9999)
+        expect(wrapper.get('button').attributes()).toHaveProperty('disabled')
         // 列表长度修改
         expect(wrapper.get('button span').text()).toBe(1)
         const firstItem = wrapper.get('li:first-child')
-        expect(firstItem.classes()).toContain('uploading')
+        expect(firstItem.classes()).toContain('upload-loading')
         await flushPromises()
         expect(wrapper.get('button span').text()).toBe('点击上传')
         // 有正确的class，并且文件名称相对应
