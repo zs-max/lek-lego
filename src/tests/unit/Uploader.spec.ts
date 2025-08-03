@@ -36,8 +36,17 @@ describe('Uploader Component',()=>{
         await wrapper.get('input').trigger('change')
         // expect(wrapper.get('button span').text()).toBe('正在上传')
         expect(mockedAxios.post).toHaveBeenCalledTimes(1)
+        // button 为disabled
+        expect(wrapper.get('button').attributes('disabled')).toBeTruthy()
+        // 列表长度修改
+        expect(wrapper.get('button span').text()).toBe(1)
+        const firstItem = wrapper.get('li:first-child')
+        expect(firstItem.classes()).toContain('uploading')
         await flushPromises()
-        expect(wrapper.get('button span').text()).toBe('上传成功')
+        expect(wrapper.get('button span').text()).toBe('点击上传')
+        // 有正确的class，并且文件名称相对应
+        expect(firstItem.classes()).toContain('upload-success')
+        expect(firstItem.get('.filename').text()).toBe(testFile.name)
     })
     it('should return error test when post is reject', async () => {
         mockedAxios.post.mockRejectedValueOnce({error:'error'})
@@ -46,5 +55,13 @@ describe('Uploader Component',()=>{
         // expect(wrapper.get('button span').text()).toBe('正在上传')
         await flushPromises()
         expect(wrapper.get('button span').text()).toBe('上传失败')
+        // 列表长度增加，列表最后一项有正确的class名称
+        expect(wrapper.findAll('li').length).toBe(1)
+        const lastItem = wrapper.get('li:last-child')
+        expect(lastItem.classes()).toContain('upload-error')
+        // 点击列表右侧的button，可以删除这一项
+        await lastItem.get('.delete-icon').trigger('click')
+        expect(wrapper.findAll('li').length).toBe(1)
+
     });
 })
