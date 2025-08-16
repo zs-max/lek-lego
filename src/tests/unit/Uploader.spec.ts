@@ -11,11 +11,25 @@ let wrapper:VueWrapper<any>
 const testFile = new File(['xyz'], 'test.png', {
     type: 'image/png',
 })
+
+const mockComponent = {
+    template:'<div><slot></slot></div>'
+}
+
+const mockComponents = {
+    "DeleteOutlined":mockComponent;
+    "LoadingOutlined":mockComponent;
+    "FileOutlined":mockComponent;
+}
+
 describe('Uploader Component',()=>{
     beforeAll(()=>{
         wrapper = shallowMount(Uploader,{
             props:{
                 action:'test.url'
+            },
+            global:{
+                stubs:mockComponents  // component 是在全局注册的组件 stubs是在组件中注册的组件
             }
         })
     })
@@ -65,4 +79,21 @@ describe('Uploader Component',()=>{
         expect(wrapper.findAll('li').length).toBe(1)
 
     });
+    it.only('should show the correct interface when using custom slot',async()=>{
+        const wrapper = mount(Uploader,{
+            props:{
+                action:'test.url'
+            },
+           slots:{
+                default:'<div>自定义内容</div>',
+                loading:'<div class="loading">custom loading</div>',
+                uploaded:`<template #upload="{uploadedData}">
+                             <div class="custom-loadad">{{uploadedData.url}}</div>
+                         </template>`
+                },
+                global:{
+                    stubs:mockComponents
+                }
+        })
+    })
 })
